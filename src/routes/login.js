@@ -1,20 +1,20 @@
-// routes/login.js
 const express = require("express");
-const Cliente = require("../models/Cliente"); // Asegúrate de importar el modelo correcto
+const jwt = require('jsonwebtoken');
+const Cliente = require("../models/Cliente");
+const verificarToken = require('../middlewares/verificarToken'); // Asegúrate de que la ruta sea correcta
 const router = express.Router();
 
 // Ruta para login de administrador
 router.post("/login", (req, res) => {
     const { correo, contrasena } = req.body;
 
-    // Buscar al administrador por nombre y contraseña
     Cliente.findOne({ correo, contrasena })
-        .then(Cliente => {
-            if (!Cliente) {
+        .then(cliente => {
+            if (!cliente) {
                 return res.status(404).json({ error: "Cliente no encontrado" });
             }
-            // Aquí podrías implementar la lógica para manejar la sesión del administrador, como generar un token JWT
-            res.json(Cliente); // En este caso, solo devolvemos el administrador encontrado
+            const token = jwt.sign({ correo: cliente.correo, userType: 'cliente', clienteId: cliente._id }, 'secretKey');
+            res.status(200).json({ mensaje: 'Inicio de sesión exitoso', token, userType: cliente.tipoUsuario, clienteId: cliente._id });
         })
         .catch(error => res.status(500).json({ error }));
 });

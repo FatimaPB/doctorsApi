@@ -23,7 +23,6 @@ app.use('/api',DoctoresRoutes);
 app.use('/api',loginRoutes);
 
 
-
 //Rutas
 
 app.get("/", (req, res) => {
