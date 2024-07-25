@@ -1,12 +1,12 @@
 const express = require("express");
-const PreguntaSchema = require("../models/Preguntas");
+const questionsSchema = require("../models/Questios");
 const router =  express.Router();
 
 //crear categoria
 
-router.post("/preguntas", (req,res)=>{
+router.post("/questions", (req,res)=>{
 
-    const Pregunta = PreguntaSchema(req.body);
+    const Pregunta = questionsSchema(req.body);
 
     Pregunta
     .save()
@@ -17,20 +17,20 @@ router.post("/preguntas", (req,res)=>{
 
 //obtener categorias 
 
-router.get("/preguntas" , (req, res)=>{
+router.get("/questions" , (req, res)=>{
 
-    PreguntaSchema
+    questionsSchema
     .find()
     .then((data) => res.json(data))
     .catch((error=> res.json({ mensaje:error})));
 });
 
 //obtener categoria por su id
-router.get("/preguntas/:id" , (req, res)=>{
+router.get("/questions/:id" , (req, res)=>{
 
     const {id} = res.params;
 
-    PreguntaSchema
+    questionsSchema
     .findById(id)
     .then((data) => res.json(data))
     .catch((error=> res.json({ mensaje:error})));
@@ -39,11 +39,11 @@ router.get("/preguntas/:id" , (req, res)=>{
 
 //editar administrador
 
-router.put("/preguntas/:id" ,(req,res)=>{
+router.put("/questions/:id" ,(req,res)=>{
     const {id} = req.params;
     const {pregunta}= req.body;
 
-    PreguntaSchema
+    questionsSchema
         .updateOne({_id : id},{ $set: {pregunta}})
         .then((data) => res.json(data))
         .catch((error) => res.json ({ message:error}));
@@ -52,10 +52,10 @@ router.put("/preguntas/:id" ,(req,res)=>{
 
 //Eliminar una categoria
 
-router.delete("/preguntas/:id" ,(req,res)=>{
+router.delete("/questions/:id" ,(req,res)=>{
     const {id} = req.params;
         
-    PreguntaSchema
+    questionsSchema
         .deleteOne({_id : id})
         .then((data) => res.json(data))
         .catch((error) => res.json ({ message:error}));
