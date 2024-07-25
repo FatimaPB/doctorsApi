@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const multer = require('multer'); // Importar multer
 const QuestionRoutes = require ('./src/routes/Questions');
+const ClienteRoutes = require('./src/routes/Cliente');
 require("dotenv").config();
 const app =  express();
 const port = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(cors());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api',QuestionRoutes);
+app.use('/api',ClienteRoutes);
 
 
 
