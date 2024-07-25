@@ -34,30 +34,4 @@ const ClienteSchema = mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('cliebte',ClienteSchema);
-
-
-
-
-/*
-    pregunta:{
-        type: String,
-        require:true
-    }
-
-
-
-/*const RegistroCliente: React.FC = () => {
-    const [preguntas, setPreguntas] = useState<any[]>([]);
-    const [statusMessage, setStatusMessage] = useState<string>('');
-    const [formData, setFormData] = useState({
-      nombre: '',
-      correo: '',
-      contraseña: '',
-      telefono: '',
-      preguntaId: '',
-      respuesta: '',
-      tipoUsuario: 'Cliente', // Default to 'cliente'
-    });
-
-    */
+module.exports = mongoose.model('cliente',ClienteSchema);
