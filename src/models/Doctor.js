@@ -1,61 +1,47 @@
-// models/Doctor.js
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const DoctorSchema = new mongoose.Schema({
-    nombre: {
-        type: String,
-        required: true,
-    },
-    correo: {
-        type: String,
-        required: true,
-    },
-    telefono: {
-        type: String,
-        required: true,
-    },
-    especialidadId:{
-        type: String,
-        required: true
-    },
-    subespecialidadId:{
-        type: String,
-        required: true
-    },
-    preguntaId:{
-        type: String,
-        required: true
-    },
-    respuesta:{
-        type: String,
-        required: true
-    },
-    tipoUsuario:{
-        type: String,
-        required: true
-    },
-    imagen: {
-        type: String  
-      }
+// Define el esquema para el modelo Doctor
+const doctorSchema = new Schema({
+  nombre: {
+    type: String,
+    required: true
+  },
+  correo: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  contrasena: {
+    type: String,
+    required: true
+  },
+  telefono: {
+    type: String,
+    required: true
+  },
+  direccion: {
+    type: String,
+    required: true
+  },
+  descripcion: {
+    type: String
+  },
+  especialidadId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Especialidad',
+    required: true
+  },
+  subespecialidadId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Subespecialidad'
+  },
+  imagen: {
+    type: String // URL o path de la imagen
+  }
+});
 
+// Crea el modelo Doctor
+const Doctor = mongoose.model('Doctor', doctorSchema);
 
-
-})
-
-module.exports = mongoose.model('doctor',DoctorSchema);
-
-
-/*
-         nombre: '',
-            correo: '',
-            contrasena: '',
-            direccion: '',
-            descripcion:'',
-            telefono: '',
-            imagen: null as File | null,
-            especialidadId: '',
-            subespecialidadId: '',
-            preguntaId: '',
-            respuesta: '',
-            tipoUsuario: 'cliente',
-*/
+module.exports = Doctor;

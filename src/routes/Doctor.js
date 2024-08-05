@@ -1,115 +1,131 @@
-const express = require("express");
-const DoctorSchema = require("../models/Doctor");
-const router = express.Router();
-const multer = require("multer");
-const path = require("path");
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const Doctor = require('../models/Doctor');
 
-// Configuración de Multer para la subida de imágenes
+const router = express.Router();
+
+// Configuración de multer para el manejo de archivos
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Carpeta donde se guardarán las imágenes
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Añade la extensión del archivo
-  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Nombre del archivo
+  }
 });
 
 const upload = multer({ storage: storage });
 
 // Crear un nuevo doctor
-router.post("/doctores", upload.single("imagen"), async (req, res) => {
+router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
-    const { nombre, correo, telefono, especialidadId, subespecialidadId, preguntaId, respuesta, tipoUsuario } = req.body;
-    const imagen = req.file ? req.file.path : '';
+    const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId } = req.body;
+    const imagen = req.file ? req.file.path : null;
 
-    const doctor = new DoctorSchema({
+    const newDoctor = new Doctor({
       nombre,
       correo,
+      contrasena,
       telefono,
+      direccion,
+      descripcion,
       especialidadId,
       subespecialidadId,
-      preguntaId,
-      respuesta,
-      tipoUsuario,
-      imagen,
+      imagen
     });
 
-    const savedDoctor = await doctor.save();
-    res.status(201).json(savedDoctor);
+    await newDoctor.save();
+    res.status(201).json({
+      message: 'Doctor agregado exitosamente',
+      doctor: newDoctor
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al agregar el doctor', error });
   }
 });
 
 // Obtener todos los doctores
-router.get("/doctores", async (req, res) => {
+router.get('/doctores', async (req, res) => {
   try {
-    const doctors = await DoctorSchema.find();
+    const doctors = await Doctor.find();
     res.status(200).json(doctors);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener doctores', error });
   }
 });
 
 // Obtener un doctor por ID
-router.get("/doctores/:id", async (req, res) => {
-  const { id } = req.params;
-
+router.get('/doctores/:id', async (req, res) => {
   try {
-    const doctor = await DoctorSchema.findById(id);
-    if (doctor) {
-      res.status(200).json(doctor);
-    } else {
-      res.status(404).json({ message: "Doctor no encontrado" });
+    const doctor = await Doctor.findById(req.params.id);
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor no encontrado' });
     }
+    res.status(200).json(doctor);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el doctor', error });
   }
 });
 
-// Editar un doctor
-router.put("/doctores/:id", upload.single("imagen"), async (req, res) => {
-  const { id } = req.params;
-  const { nombre, correo, telefono, especialidadId, subespecialidadId, preguntaId, respuesta, tipoUsuario } = req.body;
-  const imagen = req.file ? req.file.path : undefined;
-
+// Actualizar un doctor
+router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
   try {
-    const updateFields = {
+    const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId } = req.body;
+    const imagen = req.file ? req.file.path : null;
+
+    const updatedDoctor = await Doctor.findByIdAndUpdate(req.params.id, {
       nombre,
       correo,
+      contrasena,
       telefono,
+      direccion,
+      descripcion,
       especialidadId,
       subespecialidadId,
-      preguntaId,
-      respuesta,
-      tipoUsuario,
-      ...(imagen && { imagen }), // Solo agrega imagen si existe
-    };
+      imagen
+    }, { new: true });
 
-    const updatedDoctor = await DoctorSchema.findByIdAndUpdate(id, updateFields, { new: true });
-    if (updatedDoctor) {
-      res.status(200).json(updatedDoctor);
-    } else {
-      res.status(404).json({ message: "Doctor no encontrado" });
+    if (!updatedDoctor) {
+      return res.status(404).json({ message: 'Doctor no encontrado' });
     }
+
+    res.status(200).json({
+      message: 'Doctor actualizado exitosamente',
+      doctor: updatedDoctor
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al actualizar el doctor', error });
   }
 });
 
 // Eliminar un doctor
-router.delete("/doctores/:id", async (req, res) => {
-  const { id } = req.params;
-
+router.delete('/doctores/:id', async (req, res) => {
   try {
-    const result = await DoctorSchema.findByIdAndDelete(id);
-    if (result) {
-      res.status(200).json({ message: "Doctor eliminado exitosamente" });
-    } else {
-      res.status(404).json({ message: "Doctor no encontrado" });
+    const deletedDoctor = await Doctor.findByIdAndDelete(req.params.id);
+    if (!deletedDoctor) {
+      return res.status(404).json({ message: 'Doctor no encontrado' });
     }
+    res.status(200).json({ message: 'Doctor eliminado exitosamente' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al eliminar el doctor', error });
+  }
+});
+
+// Buscar doctores por subespecialidadId
+router.get('/subespecialidad/:subespecialidadId', async (req, res) => {
+  try {
+    const { subespecialidadId } = req.params;
+    const doctors = await Doctor.find({ subespecialidadId });
+    res.status(200).json(doctors);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al buscar doctores por subespecialidad', error });
   }
 });
 
