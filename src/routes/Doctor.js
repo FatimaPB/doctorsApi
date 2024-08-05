@@ -20,7 +20,7 @@ const upload = multer({ storage: storage });
 // Crear un nuevo doctor
 router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
-    const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId } = req.body;
+    const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId,  preguntaId,   respuesta } = req.body;
     const imagen = req.file ? req.file.path : null;
 
     const newDoctor = new Doctor({
