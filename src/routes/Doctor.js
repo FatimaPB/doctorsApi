@@ -1,84 +1,62 @@
-// routes/doctor.js
 const express = require("express");
 const DoctorSchema = require("../models/Doctor");
 const router = express.Router();
-const fs = require("fs");
-const multer = require("multer");
-const path = require("path");
-const upload = multer({ dest: "uploads/" });
 
-// Create a new doctor
-router.post("/doctores", upload.single('imagen'), async (req, res) => {
-    try {
-        const newDoctor = req.body;
 
-        if (req.file) {
-            const imagenBuffer = await fs.promises.readFile(req.file.path);
-            newDoctor.imagen = `data:image/png;base64,${imagenBuffer.toString('base64')}`;
-        }
+//crear
 
-        const doctor = new DoctorSchema(newDoctor);
-        const savedDoctor = await doctor.save();
-        res.status(201).json(savedDoctor);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+router.post("/doctores",(req,res)=>{
+
+    const Doctor = DoctorSchema(req.body);
+
+    Doctor
+    .save()
+    .then((data)=> res.json(data))
+    .catch((error)=> res.json({message:error}));
+})
+
+//obtener
+router.get("/doctores",(req,res)=>{
+
+    DoctorSchema
+    .find()
+    .then((data)=> res.json(data))
+    .catch((error)=> res.json({message:error}));
+})
+
+//obtener por id
+
+router.get("/doctores/:id" , (req, res)=>{
+
+    const {id} = res.params;
+
+    DoctorSchema
+    .findById(id)
+    .then((data) => res.json(data))
+    .catch((error=> res.json({ mensaje:error})));
 });
 
-// Get all doctors
-router.get("/doctores", async (req, res) => {
-    try {
-        const doctores = await DoctorSchema.find();
-        res.json(doctores);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+//editar
+
+router.put("/doctores/:id" ,(req,res)=>{
+    const {id} = req.params;
+    const {Doctor}= req.body;
+
+    DoctorSchema
+    .updateOne({_id : id},{ $set: {Doctor}})
+    .then((data) => res.json(data))
+    .catch((error) => res.json ({ message:error}));
 });
 
-// Get a doctor by ID
-router.get("/doctores/:id", async (req, res) => {
-    try {
-        const doctor = await DoctorSchema.findById(req.params.id);
-        if (!doctor) {
-            return res.status(404).json({ message: 'Doctor no encontrado' });
-        }
-        res.json(doctor);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
+//Eliminar
 
-// Update a doctor by ID
-router.put("/doctores/:id", upload.single('imagen'), async (req, res) => {
-    try {
-        const updatedData = req.body;
-
-        if (req.file) {
-            const imagenBuffer = await fs.promises.readFile(req.file.path);
-            updatedData.imagen = `data:image/png;base64,${imagenBuffer.toString('base64')}`;
-        }
-
-        const doctor = await DoctorSchema.findByIdAndUpdate(req.params.id, updatedData, { new: true });
-        if (!doctor) {
-            return res.status(404).json({ message: 'Doctor no encontrado' });
-        }
-        res.json(doctor);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-// Delete a doctor by ID
-router.delete("/doctores/:id", async (req, res) => {
-    try {
-        const doctor = await DoctorSchema.findByIdAndDelete(req.params.id);
-        if (!doctor) {
-            return res.status(404).json({ message: 'Doctor no encontrado' });
-        }
-        res.json({ message: 'Doctor eliminado correctamente' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+router.delete("/doctores/:id" ,(req,res)=>{
+    const {id} = req.params;
+        
+    DoctorSchema
+    .deleteOne({_id : id})
+    .then((data) => res.json(data))
+    .catch((error) => res.json ({ message:error}));
 });
 
 module.exports = router;
