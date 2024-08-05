@@ -38,6 +38,14 @@ const doctorSchema = new Schema({
   },
   imagen: {
     type: String // URL o path de la imagen
+  },
+  preguntaId:{
+    type: String,
+    required : true
+  },
+  respuesta:{
+    type:String,
+    required:true
   }
 });
 
