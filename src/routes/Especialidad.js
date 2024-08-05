@@ -32,6 +32,21 @@ router.get('/especialidades/:id', async (req, res) => {
     .catch((error=> res.json({ mensaje:error})));
 });
 
+// Obtener subespecialidades de una especialidad por su ID
+router.get('/especialidades/:id/subespecialidades', async (req, res) => {
+    const { id } = req.params;
+    EspecialidadSchema
+        .findById(id)
+        .then((data) => {
+            if (data) {
+                res.json(data.subespecialidades); // Asumiendo que 'subespecialidades' es el nombre del campo
+            } else {
+                res.status(404).json({ message: "Especialidad no encontrada" });
+            }
+        })
+        .catch((error) => res.json({ message: error }));
+});
+
 // Actualizar una especialidad por su ID
 router.put('/especialidades/:id', async (req, res) => {
     const {id} = req.params;
