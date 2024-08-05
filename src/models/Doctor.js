@@ -40,8 +40,9 @@ const doctorSchema = new Schema({
     type: String // URL o path de la imagen
   },
   preguntaId:{
-    type: String,
-    required : true
+    type: Schema.Types.ObjectId,
+    ref: 'Pregunta',
+    required: true
   },
   respuesta:{
     type:String,
