@@ -4,47 +4,47 @@ const DoctorSchema = mongoose.Schema({
 
     nombre:{
         type: String,
-        required: true
+        require: true
     },
     correo:{
         type: String,
-        required: true
+        require: true
     },
     contrasena:{
         type: String,
-        required: true
+        require: true
     },
     direccion:{
         type: String,
-        required: true
+        require: true
     },
     descripcion:{
         type: String,
-        required: true
+        require: true
     },
     telefono:{
         type: String,
-        required: true
+        require: true
     },
     especialidadId:{
         type: String,
-        required: true
+        require: true
     },
     subespecialidadId:{
         type: String,
-        required: true
+        require: true
     },
     preguntaId:{
         type: String,
-        required: true
+        require: true
     },
     respuesta:{
         type: String,
-        required: true
+        require: true
     },
     tipoUsuario:{
         type: String,
-        required: true
+        require: true
     },
     imagen: {
         type: String  
