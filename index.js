@@ -6,6 +6,7 @@ const multer = require('multer'); // Importar multer
 const QuestionRoutes = require ('./src/routes/Questions');
 const ClienteRoutes = require('./src/routes/Cliente');
 const DoctoresRoutes = require('./src/routes/Doctor');
+const EspecialidadRoutes = require('./src/routes/Especialidad');
 const loginRoutes =  require('./src/routes/login')
 require("dotenv").config();
 const app =  express();
@@ -21,6 +22,7 @@ app.use('/api',QuestionRoutes);
 app.use('/api',ClienteRoutes);
 app.use('/api',DoctoresRoutes);
 app.use('/api',loginRoutes);
+app.use('/api',EspecialidadRoutes);
 
 
 //Rutas
