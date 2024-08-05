@@ -14,7 +14,6 @@ const DoctorSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-
     especialidadId:{
         type: String,
         required: true
