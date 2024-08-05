@@ -1,6 +1,5 @@
 const express = require("express");
 const DoctorSchema = require("../models/Doctor");
-const Doctor = require("../models/Doctor");
 const router = express.Router();
 
 
@@ -8,7 +7,7 @@ const router = express.Router();
 
 router.post("/doctores",(req,res)=>{
 
-    const Doctor = ClienteSchema(req.body);
+    const Doctor = DoctorSchema(req.body);
 
     Doctor
     .save()
