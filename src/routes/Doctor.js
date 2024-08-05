@@ -32,6 +32,8 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
       descripcion,
       especialidadId,
       subespecialidadId,
+      preguntaId,
+      respuesta,
       imagen
     });
 
@@ -74,7 +76,7 @@ router.get('/doctores/:id', async (req, res) => {
 // Actualizar un doctor
 router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
   try {
-    const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId } = req.body;
+    const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId,preguntaId,respuesta } = req.body;
     const imagen = req.file ? req.file.path : null;
 
     const updatedDoctor = await Doctor.findByIdAndUpdate(req.params.id, {
@@ -86,6 +88,8 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
       descripcion,
       especialidadId,
       subespecialidadId,
+      preguntaId,
+      respuesta,
       imagen
     }, { new: true });
 
