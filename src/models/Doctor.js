@@ -1,50 +1,39 @@
+// models/Doctor.js
 const mongoose = require("mongoose");
 
-const DoctorSchema = mongoose.Schema({
+const DoctorSchema = new mongoose.Schema({
+    nombre: {
+        type: String,
+        required: true,
+    },
+    correo: {
+        type: String,
+        required: true,
+    },
+    telefono: {
+        type: String,
+        required: true,
+    },
 
-    nombre:{
-        type: String,
-        require: true
-    },
-    correo:{
-        type: String,
-        require: true
-    },
-    contrasena:{
-        type: String,
-        require: true
-    },
-    direccion:{
-        type: String,
-        require: true
-    },
-    descripcion:{
-        type: String,
-        require: true
-    },
-    telefono:{
-        type: String,
-        require: true
-    },
     especialidadId:{
         type: String,
-        require: true
+        required: true
     },
     subespecialidadId:{
         type: String,
-        require: true
+        required: true
     },
     preguntaId:{
         type: String,
-        require: true
+        required: true
     },
     respuesta:{
         type: String,
-        require: true
+        required: true
     },
     tipoUsuario:{
         type: String,
-        require: true
+        required: true
     },
     imagen: {
         type: String  
