@@ -1,31 +1,34 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const DoctorSchema = require('../models/Doctor');
+const fs = require('fs');
+const Doctor = require('../models/Doctor');
 
 const router = express.Router();
 
+// Create uploads directory if it doesn't exist
+const uploadDir = 'uploads/';
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
 // Configuración de almacenamiento de Multer
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/'); // Directorio donde se guardarán los archivos
-    },
-    filename: function (req, file, cb) {
-      const extension = path.extname(file.originalname);
-      cb(null, file.fieldname + '-' + Date.now() + extension); // Nombre del archivo guardado
-    }
-  });
+  destination: function (req, file, cb) {
+    cb(null, uploadDir); // Directorio donde se guardarán los archivos
+  },
+  filename: function (req, file, cb) {
+    const extension = path.extname(file.originalname);
+    cb(null, file.fieldname + '-' + Date.now() + extension); // Nombre del archivo guardado
+  },
+});
 
 const upload = multer({ storage: storage });
-
 
 // Crear un nuevo doctor
 router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
-    const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId,  preguntaId,   respuesta } = req.body;
-    const imagen = req.file ? req.file.path : null;
-
-    const Doctor = DoctorSchema({
+    const {
       nombre,
       correo,
       contrasena,
@@ -36,13 +39,27 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
       subespecialidadId,
       preguntaId,
       respuesta,
-      imagen
+    } = req.body;
+    const imagen = req.file ? req.file.path : null;
+
+    const doctor = new Doctor({
+      nombre,
+      correo,
+      contrasena,
+      telefono,
+      direccion,
+      descripcion,
+      especialidadId,
+      subespecialidadId,
+      preguntaId,
+      respuesta,
+      imagen,
     });
 
-    await Doctor.save();
+    await doctor.save();
     res.status(201).json({
       message: 'Doctor agregado exitosamente',
-      DoctorSchema: Doctor
+      doctor: doctor,
     });
   } catch (error) {
     console.error(error);
@@ -53,7 +70,7 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
 // Obtener todos los doctores
 router.get('/doctores', async (req, res) => {
   try {
-    const doctors = await DoctorSchema.find();
+    const doctors = await Doctor.find();
     res.status(200).json(doctors);
   } catch (error) {
     console.error(error);
@@ -64,7 +81,7 @@ router.get('/doctores', async (req, res) => {
 // Obtener un doctor por ID
 router.get('/doctores/:id', async (req, res) => {
   try {
-    const doctor = await DoctorSchema.findById(req.params.id);
+    const doctor = await Doctor.findById(req.params.id);
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor no encontrado' });
     }
@@ -78,10 +95,7 @@ router.get('/doctores/:id', async (req, res) => {
 // Actualizar un doctor
 router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
   try {
-    const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId,preguntaId,respuesta } = req.body;
-    const imagen = req.file ? req.file.path : null;
-
-    const updatedDoctor = await Doctor.findByIdAndUpdate(req.params.id, {
+    const {
       nombre,
       correo,
       contrasena,
@@ -92,8 +106,26 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
       subespecialidadId,
       preguntaId,
       respuesta,
-      imagen
-    }, { new: true });
+    } = req.body;
+    const imagen = req.file ? req.file.path : null;
+
+    const updatedDoctor = await Doctor.findByIdAndUpdate(
+      req.params.id,
+      {
+        nombre,
+        correo,
+        contrasena,
+        telefono,
+        direccion,
+        descripcion,
+        especialidadId,
+        subespecialidadId,
+        preguntaId,
+        respuesta,
+        imagen,
+      },
+      { new: true }
+    );
 
     if (!updatedDoctor) {
       return res.status(404).json({ message: 'Doctor no encontrado' });
@@ -101,7 +133,7 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
 
     res.status(200).json({
       message: 'Doctor actualizado exitosamente',
-      doctor: updatedDoctor
+      doctor: updatedDoctor,
     });
   } catch (error) {
     console.error(error);
@@ -127,7 +159,7 @@ router.delete('/doctores/:id', async (req, res) => {
 router.get('/subespecialidad/:subespecialidadId', async (req, res) => {
   try {
     const { subespecialidadId } = req.params;
-    const doctors = await DoctorSchema.find({ subespecialidadId });
+    const doctors = await Doctor.find({ subespecialidadId });
     res.status(200).json(doctors);
   } catch (error) {
     console.error(error);

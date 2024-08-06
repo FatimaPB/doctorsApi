@@ -1,49 +1,49 @@
 const mongoose = require('mongoose');
 
 const DoctorSchema = new mongoose.Schema({
-  nombre: { 
+  nombre: {
     type: String,
-     required: true },
-
-  correo: { 
+    required: true,
+  },
+  correo: {
     type: String,
-     required: true },
-
-  contrasena: { 
-    type: String, 
-    required: true },
-
+    required: true,
+  },
+  contrasena: {
+    type: String,
+    required: true,
+  },
   telefono: {
-     type: String,
-     required: true },
-
-  direccion: { 
     type: String,
-     required: true },
-
+    required: true,
+  },
+  direccion: {
+    type: String,
+    required: true,
+  },
   descripcion: {
-     type: String, 
-     required: true },
-
-  especialidadId: { 
-    type: String, 
-    required: true },
-
-  subespecialidadId: { 
-    type: String, 
-    required: true },
-
+    type: String,
+    required: true,
+  },
+  especialidadId: {
+    type: String,
+    required: true,
+  },
+  subespecialidadId: {
+    type: String,
+    required: true,
+  },
   preguntaId: {
-     type: String,
-      required: true },
-
-  respuesta: { 
-    type: String, 
-    required: true },
-
-  imagen: { 
-    type: String 
-}  // Asegúrate de que este campo esté en el esquema
+    type: String,
+    required: true,
+  },
+  respuesta: {
+    type: String,
+    required: true,
+  },
+  imagen: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model('doctor', DoctorSchema);
