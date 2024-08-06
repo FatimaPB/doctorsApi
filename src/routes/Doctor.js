@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const Doctor = require('../models/Doctor');
+const DoctorSchema = require('../models/Doctor');
 
 const router = express.Router();
 
@@ -18,13 +18,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+
 // Crear un nuevo doctor
 router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
     const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId,  preguntaId,   respuesta } = req.body;
     const imagen = req.file ? req.file.path : null;
 
-    const newDoctor = new Doctor({
+    const newDoctor = new DoctorSchema({
       nombre,
       correo,
       contrasena,

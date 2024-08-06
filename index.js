@@ -5,7 +5,7 @@ const path = require('path');
 const multer = require('multer'); // Importar multer
 const QuestionRoutes = require ('./src/routes/Questions');
 const ClienteRoutes = require('./src/routes/Cliente');
-const DoctoresRoutes = require('./src/routes/Doctor');
+const DoctoreRoutes = require('./src/routes/Doctor');
 const EspecialidadRoutes = require('./src/routes/Especialidad');
 const loginRoutes =  require('./src/routes/login')
 require("dotenv").config();
@@ -20,7 +20,7 @@ app.use(cors());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api',QuestionRoutes);
 app.use('/api',ClienteRoutes);
-app.use('/api',DoctoresRoutes);
+app.use('/api',DoctoreRoutes);
 app.use('/api',loginRoutes);
 app.use('/api',EspecialidadRoutes);
 
