@@ -1,56 +1,49 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
 
-// Define el esquema para el modelo Doctor
-const doctorSchema = new Schema({
-  nombre: {
+const doctorSchema = new mongoose.Schema({
+  nombre: { 
     type: String,
-    required: true
-  },
-  correo: {
+     required: true },
+
+  correo: { 
     type: String,
-    required: true,
-    unique: true
-  },
-  contrasena: {
-    type: String,
-    required: true
-  },
+     required: true },
+
+  contrasena: { 
+    type: String, 
+    required: true },
+
   telefono: {
+     type: String,
+     required: true },
+
+  direccion: { 
     type: String,
-    required: true
-  },
-  direccion: {
-    type: String,
-    required: true
-  },
+     required: true },
+
   descripcion: {
-    type: String
-  },
-  especialidadId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Especialidad',
-    required: true
-  },
-  subespecialidadId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Subespecialidad'
-  },
-  imagen: {
-    type: String // URL o path de la imagen
-  },
-  preguntaId:{
-    type: Schema.Types.ObjectId,
-    ref: 'Pregunta',
-    required: true
-  },
-  respuesta:{
-    type:String,
-    required:true
-  }
+     type: String, 
+     required: true },
+
+  especialidadId: { 
+    type: String, 
+    required: true },
+
+  subespecialidadId: { 
+    type: String, 
+    required: true },
+
+  preguntaId: {
+     type: String,
+      required: true },
+
+  respuesta: { 
+    type: String, 
+    required: true },
+
+  imagen: { 
+    type: String 
+}  // Asegúrate de que este campo esté en el esquema
 });
 
-// Crea el modelo Doctor
-const Doctor = mongoose.model('Doctor', doctorSchema);
-
-module.exports = Doctor;
+module.exports = mongoose.model('Doctor', doctorSchema);
