@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const DoctorSchema = require('../models/Doctor');
+const Doctor = require('../models/Doctor');
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
     const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId,  preguntaId,   respuesta } = req.body;
     const imagen = req.file ? req.file.path : null;
 
-    const Doctor = new DoctorSchema({
+    const newDoctor = new Doctor({
       nombre,
       correo,
       contrasena,
