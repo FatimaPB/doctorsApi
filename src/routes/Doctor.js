@@ -25,7 +25,7 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
     const { nombre, correo, contrasena, telefono, direccion, descripcion, especialidadId, subespecialidadId,  preguntaId,   respuesta } = req.body;
     const imagen = req.file ? req.file.path : null;
 
-    const newDoctor = new DoctorSchema({
+    const Doctor = DoctorSchema({
       nombre,
       correo,
       contrasena,
@@ -39,10 +39,10 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
       imagen
     });
 
-    await newDoctor.save();
+    await Doctor.save();
     res.status(201).json({
       message: 'Doctor agregado exitosamente',
-      doctor: newDoctor
+      DoctorSchema: Doctor
     });
   } catch (error) {
     console.error(error);
