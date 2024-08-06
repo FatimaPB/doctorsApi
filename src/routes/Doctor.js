@@ -5,15 +5,16 @@ const Doctor = require('../models/Doctor');
 
 const router = express.Router();
 
-// Configuración de multer para el manejo de archivos
+// Configuración de almacenamiento de Multer
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Carpeta donde se guardarán las imágenes
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Nombre del archivo
-  }
-});
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/'); // Directorio donde se guardarán los archivos
+    },
+    filename: function (req, file, cb) {
+      const extension = path.extname(file.originalname);
+      cb(null, file.fieldname + '-' + Date.now() + extension); // Nombre del archivo guardado
+    }
+  });
 
 const upload = multer({ storage: storage });
 
