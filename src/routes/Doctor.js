@@ -53,7 +53,7 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
 // Obtener todos los doctores
 router.get('/doctores', async (req, res) => {
   try {
-    const doctors = await Doctor.find();
+    const doctors = await DoctorSchema.find();
     res.status(200).json(doctors);
   } catch (error) {
     console.error(error);
@@ -64,7 +64,7 @@ router.get('/doctores', async (req, res) => {
 // Obtener un doctor por ID
 router.get('/doctores/:id', async (req, res) => {
   try {
-    const doctor = await Doctor.findById(req.params.id);
+    const doctor = await DoctorSchema.findById(req.params.id);
     if (!doctor) {
       return res.status(404).json({ message: 'Doctor no encontrado' });
     }
@@ -127,7 +127,7 @@ router.delete('/doctores/:id', async (req, res) => {
 router.get('/subespecialidad/:subespecialidadId', async (req, res) => {
   try {
     const { subespecialidadId } = req.params;
-    const doctors = await Doctor.find({ subespecialidadId });
+    const doctors = await DoctorSchema.find({ subespecialidadId });
     res.status(200).json(doctors);
   } catch (error) {
     console.error(error);
