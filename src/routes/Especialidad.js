@@ -24,13 +24,19 @@ router.get('/especialidades', async (req, res) => {
 
 // Obtener una especialidad por su ID
 router.get('/especialidades/:id', async (req, res) => {
- 
-    const {id} = res.params;
+    const { id } = req.params;
     EspecialidadSchema
-    .findById(id)
-    .then((data) => res.json(data))
-    .catch((error=> res.json({ mensaje:error})));
+        .findById(id)
+        .then((data) => {
+            if (data) {
+                res.json(data);
+            } else {
+                res.status(404).json({ message: "Especialidad no encontrada" });
+            }
+        })
+        .catch((error) => res.json({ message: error }));
 });
+
 
 // Obtener subespecialidades de una especialidad por su ID
 router.get('/especialidades/:id/subespecialidades', async (req, res) => {
