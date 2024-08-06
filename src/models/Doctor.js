@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const doctorSchema = new mongoose.Schema({
+const DoctorSchema = new mongoose.Schema({
   nombre: { 
     type: String,
      required: true },
@@ -46,4 +46,4 @@ const doctorSchema = new mongoose.Schema({
 }  // Asegúrate de que este campo esté en el esquema
 });
 
-module.exports = mongoose.model('Doctor', doctorSchema);
+module.exports = mongoose.model('doctor', DoctorSchema);
