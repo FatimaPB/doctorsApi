@@ -6,23 +6,26 @@ const Doctor = require('../models/Doctor');
 
 const router = express.Router();
 
+// Create uploads directory if it doesn't exist
 const uploadDir = 'uploads/';
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
+// Configuración de almacenamiento de Multer
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
+  destination: function (req, file, cb) {
+    cb(null, uploadDir); // Directorio donde se guardarán los archivos
   },
-  filename: (req, file, cb) => {
+  filename: function (req, file, cb) {
     const extension = path.extname(file.originalname);
-    cb(null, file.fieldname + '-' + Date.now() + extension);
+    cb(null, file.fieldname + '-' + Date.now() + extension); // Nombre del archivo guardado
   },
 });
 
 const upload = multer({ storage: storage });
 
+// Crear un nuevo doctor
 router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
     const {
@@ -37,7 +40,6 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
       preguntaId,
       respuesta,
     } = req.body;
-
     const imagen = req.file ? req.file.path : null;
 
     const doctor = new Doctor({
@@ -60,18 +62,19 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
       doctor: doctor,
     });
   } catch (error) {
-    console.error('Error al agregar el doctor:', error.message);
-    res.status(500).json({ message: 'Error al agregar el doctor', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al agregar el doctor', error });
   }
 });
+
 // Obtener todos los doctores
 router.get('/doctores', async (req, res) => {
   try {
     const doctors = await Doctor.find();
     res.status(200).json(doctors);
   } catch (error) {
-    console.error('Error al obtener doctores:', error.message);
-    res.status(500).json({ message: 'Error al obtener doctores', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener doctores', error });
   }
 });
 
@@ -84,8 +87,8 @@ router.get('/doctores/:id', async (req, res) => {
     }
     res.status(200).json(doctor);
   } catch (error) {
-    console.error('Error al obtener el doctor:', error.message);
-    res.status(500).json({ message: 'Error al obtener el doctor', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el doctor', error });
   }
 });
 
@@ -133,8 +136,8 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
       doctor: updatedDoctor,
     });
   } catch (error) {
-    console.error('Error al actualizar el doctor:', error.message);
-    res.status(500).json({ message: 'Error al actualizar el doctor', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al actualizar el doctor', error });
   }
 });
 
@@ -147,8 +150,8 @@ router.delete('/doctores/:id', async (req, res) => {
     }
     res.status(200).json({ message: 'Doctor eliminado exitosamente' });
   } catch (error) {
-    console.error('Error al eliminar el doctor:', error.message);
-    res.status(500).json({ message: 'Error al eliminar el doctor', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al eliminar el doctor', error });
   }
 });
 
@@ -159,8 +162,8 @@ router.get('/subespecialidad/:subespecialidadId', async (req, res) => {
     const doctors = await Doctor.find({ subespecialidadId });
     res.status(200).json(doctors);
   } catch (error) {
-    console.error('Error al buscar doctores por subespecialidad:', error.message);
-    res.status(500).json({ message: 'Error al buscar doctores por subespecialidad', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Error al buscar doctores por subespecialidad', error });
   }
 });
 
