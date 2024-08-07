@@ -6,17 +6,27 @@ const Doctor = require('../models/Doctor');
 
 const router = express.Router();
 
+// Crear directorio de subidas si no existe
+const uploadDir = 'uploads/';
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 
+// Configuración de almacenamiento de Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, 'uploads/'));
+    cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
+    const extension = path.extname(file.originalname);
+    cb(null, file.fieldname + '-' + Date.now() + extension);
+  },
 });
 
+const upload = multer({ storage: storage });
 
+
+// Crear un nuevo doctor
 router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
     const {
@@ -58,7 +68,6 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
     res.status(500).json({ message: 'Error al agregar el doctor', error: error.message });
   }
 });
-
 
 // Obtener todos los doctores
 router.get('/doctores', async (req, res) => {
