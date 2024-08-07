@@ -2,33 +2,32 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const cloudinary = require('../config/cloudinaryConfig'); // Importa la configuración de Cloudinary
 const Doctor = require('../models/Doctor');
 
 const router = express.Router();
 
-// Create uploads directory if it doesn't exist
-const uploadDir = 'uploads/';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-// Configuración de almacenamiento de Multer
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir); // Directorio donde se guardarán los archivos
-  },
-  filename: function (req, file, cb) {
-    const extension = path.extname(file.originalname);
-    cb(null, file.fieldname + '-' + Date.now() + extension); // Nombre del archivo guardado
-  },
-});
-
+// Configuración de almacenamiento de Multer en memoria
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Crear un nuevo doctor
 router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
     console.log('File:', req.file); // Verifica que el archivo está siendo recibido
+    
+    // Subir la imagen a Cloudinary
+    let imagenUrl = null;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload_stream((error, result) => {
+        if (error) {
+          console.error('Error uploading to Cloudinary:', error);
+          return res.status(500).json({ error: 'Error al subir la imagen' });
+        }
+        imagenUrl = result.secure_url;
+      }).end(req.file.buffer);
+    }
+
     const {
       nombre,
       correo,
@@ -41,7 +40,6 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
       preguntaId,
       respuesta,
     } = req.body;
-    const imagen = req.file ? req.file.path : null;
 
     const doctor = new Doctor({
       nombre,
@@ -54,7 +52,7 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
       subespecialidadId,
       preguntaId,
       respuesta,
-      imagen,
+      imagen: imagenUrl,
     });
 
     await doctor.save();
@@ -67,7 +65,6 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
     res.status(500).json({ message: 'Error al agregar el doctor', error });
   }
 });
-
 
 // Obtener todos los doctores
 router.get('/doctores', async (req, res) => {
@@ -109,7 +106,18 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
       preguntaId,
       respuesta,
     } = req.body;
-    const imagen = req.file ? req.file.path : null;
+
+    // Subir la nueva imagen a Cloudinary si se proporciona
+    let imagenUrl = null;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload_stream((error, result) => {
+        if (error) {
+          console.error('Error uploading to Cloudinary:', error);
+          return res.status(500).json({ error: 'Error al subir la imagen' });
+        }
+        imagenUrl = result.secure_url;
+      }).end(req.file.buffer);
+    }
 
     const updatedDoctor = await Doctor.findByIdAndUpdate(
       req.params.id,
@@ -124,7 +132,7 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
         subespecialidadId,
         preguntaId,
         respuesta,
-        imagen,
+        imagen: imagenUrl || undefined, // Usa la nueva imagen si existe
       },
       { new: true }
     );
