@@ -7,7 +7,6 @@ const Doctor = require('../models/Doctor');
 const router = express.Router();
 
 
-// Configuración de Multer para subir imágenes
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, 'uploads/'));
@@ -17,9 +16,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
 
-// Crear un nuevo doctor
 router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
     const {
@@ -61,6 +58,7 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
     res.status(500).json({ message: 'Error al agregar el doctor', error: error.message });
   }
 });
+
 
 // Obtener todos los doctores
 router.get('/doctores', async (req, res) => {
