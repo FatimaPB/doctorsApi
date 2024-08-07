@@ -6,21 +6,15 @@ const Doctor = require('../models/Doctor');
 
 const router = express.Router();
 
-// Crear directorio de subidas si no existe
-const uploadDir = 'uploads/';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
 
-// Configuración de almacenamiento de Multer
+// Configuración de Multer para subir imágenes
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, uploadDir);
+    cb(null, path.join(__dirname, 'uploads/'));
   },
   filename: function (req, file, cb) {
-    const extension = path.extname(file.originalname);
-    cb(null, file.fieldname + '-' + Date.now() + extension);
-  },
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
 });
 
 const upload = multer({ storage: storage });
