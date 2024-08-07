@@ -28,6 +28,7 @@ const upload = multer({ storage: storage });
 // Crear un nuevo doctor
 router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
+    console.log('File:', req.file); // Verifica que el archivo está siendo recibido
     const {
       nombre,
       correo,
@@ -66,6 +67,7 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
     res.status(500).json({ message: 'Error al agregar el doctor', error });
   }
 });
+
 
 // Obtener todos los doctores
 router.get('/doctores', async (req, res) => {
