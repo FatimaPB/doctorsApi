@@ -1,7 +1,5 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const cloudinary = require('../config/cloudinaryConfig'); // Importa la configuración de Cloudinary
 const Doctor = require('../models/Doctor');
 
@@ -11,21 +9,27 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+// Función para subir imágenes a Cloudinary
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream((error, result) => {
+      if (error) {
+        return reject(error);
+      }
+      resolve(result.secure_url);
+    }).end(fileBuffer);
+  });
+};
+
 // Crear un nuevo doctor
 router.post('/doctores', upload.single('imagen'), async (req, res) => {
   try {
     console.log('File:', req.file); // Verifica que el archivo está siendo recibido
-    
+
     // Subir la imagen a Cloudinary
     let imagenUrl = null;
     if (req.file) {
-      const result = await cloudinary.uploader.upload_stream((error, result) => {
-        if (error) {
-          console.error('Error uploading to Cloudinary:', error);
-          return res.status(500).json({ error: 'Error al subir la imagen' });
-        }
-        imagenUrl = result.secure_url;
-      }).end(req.file.buffer);
+      imagenUrl = await uploadToCloudinary(req.file.buffer);
     }
 
     const {
@@ -110,13 +114,7 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
     // Subir la nueva imagen a Cloudinary si se proporciona
     let imagenUrl = null;
     if (req.file) {
-      const result = await cloudinary.uploader.upload_stream((error, result) => {
-        if (error) {
-          console.error('Error uploading to Cloudinary:', error);
-          return res.status(500).json({ error: 'Error al subir la imagen' });
-        }
-        imagenUrl = result.secure_url;
-      }).end(req.file.buffer);
+      imagenUrl = await uploadToCloudinary(req.file.buffer);
     }
 
     const updatedDoctor = await Doctor.findByIdAndUpdate(
