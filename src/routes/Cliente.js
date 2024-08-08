@@ -73,7 +73,12 @@ router.post('/clientes/verificar-correo-respuesta', async (req, res) => {
         return res.status(404).json({ message: 'Cliente no encontrado' });
       }
   
-      if (cliente.respuestaSeguridad !== respuesta) {
+      console.log('Correo recibido:', correo);
+      console.log('Respuesta recibida:', respuesta);
+      console.log('Respuesta almacenada:', cliente.respuesta); // Ajustado a 'respuesta'
+  
+      // Verifica la respuesta de seguridad
+      if (!cliente.respuesta || cliente.respuesta.trim() !== respuesta.trim()) {
         return res.status(400).json({ message: 'Respuesta de seguridad incorrecta' });
       }
   
@@ -82,6 +87,7 @@ router.post('/clientes/verificar-correo-respuesta', async (req, res) => {
       res.status(500).json({ message: 'Error al verificar el correo o la respuesta', error: error.message });
     }
   });
+  
   
   // Ruta para establecer nueva contraseña
   router.post('/clientes/establecer-nueva-contrasena', async (req, res) => {
