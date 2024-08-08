@@ -55,13 +55,24 @@ router.get('/especialidades/:id/subespecialidades', async (req, res) => {
 
 // Actualizar una especialidad por su ID
 router.put('/especialidades/:id', async (req, res) => {
-    const {id} = req.params;
-    const {Especialidad}=req.body;
+    const { id } = req.params;
+    const { nombre, subespecialidades } = req.body;
 
-    EspecialidadSchema
-    .updateOne({_id : id},{ $set: {Especialidad}})
-    .then((data) => res.json(data))
-    .catch((error) => res.json ({ message:error}));
+    try {
+        const result = await EspecialidadSchema.updateOne(
+            { _id: id },
+            { $set: { nombre, subespecialidades } }
+        );
+
+        if (result.nModified === 0) {
+            return res.status(404).json({ message: 'Especialidad no encontrada' });
+        }
+
+        res.json(result);
+    } catch (error) {
+        console.error('Error updating especialidad:', error);
+        res.status(500).json({ message: 'Error updating especialidad' });
+    }
 });
 
 // Eliminar una especialidad por su ID
