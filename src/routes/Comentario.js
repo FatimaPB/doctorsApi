@@ -26,7 +26,7 @@ router.get('/comentarios/:doctorId', async (req, res, next) => {
   try {
     const { doctorId } = req.params;
 
-    const comentarios = await Comentario.find({ doctorId: mongoose.Types.ObjectId(doctorId) }).sort({ fecha: -1 });
+    const comentarios = await comentario.find({ doctorId: mongoose.Types.ObjectId(doctorId) }).sort({ fecha: -1 });
 
     res.json(comentarios);
   } catch (error) {
