@@ -2,13 +2,11 @@ const mongoose = require('mongoose');
 
 const comentarioSchema = new mongoose.Schema({
   doctorId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Doctor',
+    type: String,
     required: true
   },
   clienteId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Cliente',
+    type:String,
     required: true
   },
   comentario: {
