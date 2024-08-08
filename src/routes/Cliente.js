@@ -61,4 +61,50 @@ router.delete("/Clientes/:id" ,(req,res)=>{
     .catch((error) => res.json ({ message:error}));
 });
 
+// Agregar esta ruta en tu archivo de rutas Express
+
+// Ruta para verificar correo y respuesta
+router.post('/clientes/verificar-correo-respuesta', async (req, res) => {
+    const { correo, respuesta } = req.body;
+  
+    try {
+      const cliente = await ClienteSchema.findOne({ correo });
+  
+      if (!cliente) {
+        return res.status(404).json({ message: 'Cliente no encontrado' });
+      }
+  
+      if (cliente.respuestaSeguridad !== respuesta) {
+        return res.status(400).json({ message: 'Respuesta de seguridad incorrecta' });
+      }
+  
+      res.json({ message: 'Correo y respuesta verificados. Ahora puede establecer una nueva contraseña.' });
+    } catch (error) {
+      res.status(500).json({ message: 'Error al verificar el correo o la respuesta', error });
+    }
+  });
+  
+  // Ruta para establecer nueva contraseña
+  router.post('/clientes/establecer-nueva-contrasena', async (req, res) => {
+    const { correo, nuevaContrasena } = req.body;
+  
+    try {
+      const cliente = await ClienteSchema.findOne({ correo });
+  
+      if (!cliente) {
+        return res.status(404).json({ message: 'Cliente no encontrado' });
+      }
+  
+      // Actualizar la contraseña
+      cliente.contrasena = nuevaContrasena;
+      await cliente.save();
+  
+      res.json({ message: 'Contraseña actualizada correctamente' });
+    } catch (error) {
+      res.status(500).json({ message: 'Error al actualizar la contraseña', error });
+    }
+  });
+  
+  
+
 module.exports = router;
