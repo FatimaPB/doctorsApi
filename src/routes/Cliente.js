@@ -62,7 +62,6 @@ router.delete("/Clientes/:id" ,(req,res)=>{
 });
 
 // Agregar esta ruta en tu archivo de rutas Express
-
 // Ruta para verificar correo y respuesta
 router.post('/clientes/verificar-correo-respuesta', async (req, res) => {
     const { correo, respuesta } = req.body;
@@ -80,7 +79,7 @@ router.post('/clientes/verificar-correo-respuesta', async (req, res) => {
   
       res.json({ message: 'Correo y respuesta verificados. Ahora puede establecer una nueva contraseña.' });
     } catch (error) {
-      res.status(500).json({ message: 'Error al verificar el correo o la respuesta', error });
+      res.status(500).json({ message: 'Error al verificar el correo o la respuesta', error: error.message });
     }
   });
   
@@ -101,10 +100,8 @@ router.post('/clientes/verificar-correo-respuesta', async (req, res) => {
   
       res.json({ message: 'Contraseña actualizada correctamente' });
     } catch (error) {
-      res.status(500).json({ message: 'Error al actualizar la contraseña', error });
+      res.status(500).json({ message: 'Error al actualizar la contraseña', error: error.message });
     }
   });
   
-  
-
 module.exports = router;
