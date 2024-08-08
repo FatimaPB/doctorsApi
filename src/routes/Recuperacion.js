@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Cliente = require('../models/Cliente');
+const bcrypt = require('bcrypt');
 
 
 // Ruta para verificar correo y respuesta
