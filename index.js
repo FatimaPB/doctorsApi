@@ -7,7 +7,9 @@ const QuestionRoutes = require ('./src/routes/Questions');
 const ClienteRoutes = require('./src/routes/Cliente');
 const DoctoreRoutes = require('./src/routes/Doctor');
 const EspecialidadRoutes = require('./src/routes/Especialidad');
-const loginRoutes =  require('./src/routes/login')
+const loginRoutes =  require('./src/routes/login');
+const CalificacionRoutes = require('./src/routes/Calificacion');
+const ComentarioRoutes = require('./src/routes/Comentario');
 require("dotenv").config();
 const app =  express();
 const port = process.env.PORT || 3000;
@@ -24,6 +26,9 @@ app.use('/api',ClienteRoutes);
 app.use('/api',DoctoreRoutes);
 app.use('/api',loginRoutes);
 app.use('/api',EspecialidadRoutes);
+app.use('/api',CalificacionRoutes);
+app.use('/api',ComentarioRoutes)
+
 
 
 //Rutas

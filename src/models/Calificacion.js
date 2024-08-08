@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const comentarioSchema = new mongoose.Schema({
+const calificacionSchema = new mongoose.Schema({
   doctorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Doctor',
@@ -11,15 +11,16 @@ const comentarioSchema = new mongoose.Schema({
     ref: 'Cliente',
     required: true
   },
-  comentario: {
-    type: String,
-    required: true
+  calificacion: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5
   },
   fecha: {
     type: Date,
     default: Date.now
   }
-});
+})
 
-module.exports = mongoose.model('Comentario', comentarioSchema);
-
+module.exports = mongoose.model('Calificacion', calificacionSchema);
