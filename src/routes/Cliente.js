@@ -38,16 +38,18 @@ router.get("/Clientes/:id" , (req, res)=>{
 
 //editar
 
-router.put("/Clientes/:id" ,(req,res)=>{
-    const {id} = req.params;
-    const {Cliente}= req.body;
-
-    ClienteSchema
-    .updateOne({_id : id},{ $set: {Cliente}})
-    .then((data) => res.json(data))
-    .catch((error) => res.json ({ message:error}));
-});
-
+router.put('/clientes/:id', async (req, res) => {
+    const { id } = req.params;
+    const updatedCliente = req.body;
+  
+    try {
+      const result = await ClienteSchema.updateOne({ _id: id }, { $set: updatedCliente });
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: 'Error updating client', error });
+    }
+  });
+  
 //Eliminar
 
 router.delete("/Clientes/:id" ,(req,res)=>{
