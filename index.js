@@ -8,7 +8,6 @@ const ClienteRoutes = require('./src/routes/Cliente');
 const DoctoreRoutes = require('./src/routes/Doctor');
 const EspecialidadRoutes = require('./src/routes/Especialidad');
 const loginRoutes =  require('./src/routes/login')
-const Recuperacion = require('./src/routes/Recuperacion')
 require("dotenv").config();
 const app =  express();
 const port = process.env.PORT || 3000;
