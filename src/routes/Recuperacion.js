@@ -1,8 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const router = express.Router();
 const Cliente = require('../models/Cliente');
-
+const router = express.Router();
 // Ruta para verificar correo y respuesta
 router.post('/verificar-correo-respuesta', async (req, res) => {
   const { correo, respuesta } = req.body;
