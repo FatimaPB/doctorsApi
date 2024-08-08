@@ -22,7 +22,7 @@ router.post('/comentarios', async (req, res, next) => {
 });
 
 // Ruta para obtener los comentarios de un doctor
-router.get('comentarios/:doctorId', async (req, res, next) => {
+router.get('/comentarios/:doctorId', async (req, res, next) => {
   try {
     const { doctorId } = req.params;
 
