@@ -22,23 +22,37 @@ router.post('/', async (req, res, next) => {
 });
 
 // Ruta para obtener el promedio de calificaciones de un doctor
-router.get('/promedio/:doctorId', async (req, res, next) => {
-  try {
-    const { doctorId } = req.params;
-
-    const calificaciones = await Calificacion.aggregate([
-      { $match: { doctorId: mongoose.Types.ObjectId(doctorId) } },
-      { $group: { _id: '$doctorId', promedio: { $avg: '$calificacion' } } }
-    ]);
-
-    if (calificaciones.length > 0) {
-      res.json({ promedio: calificaciones[0].promedio });
-    } else {
-      res.json({ promedio: 0 });
+router.get('/promedio/:doctorId', async (req, res) => {
+    try {
+      const doctorId = req.params.doctorId;
+  
+      if (!ObjectId.isValid(doctorId)) {
+        return res.status(400).json({ error: 'ID de doctor inválido' });
+      }
+  
+      // Convertir el doctorId a ObjectId
+      const result = await db.collection('Calificacion').aggregate([
+        { $match: { doctorId: ObjectId(doctorId) } },
+        {
+          $group: {
+            _id: '$doctorId',
+            promedio: { $avg: '$calificacion' }
+          }
+        }
+      ]).toArray();
+  
+      if (result.length === 0) {
+        return res.status(404).json({ error: 'No hay calificaciones para este doctor' });
+      }
+  
+      const promedio = result[0].promedio;
+  
+      res.json({ promedio });
+    } catch (error) {
+      console.error('Error al obtener el promedio de calificaciones:', error);
+      res.status(500).json({ error: 'Error al obtener el promedio de calificaciones' });
     }
-  } catch (error) {
-    next(error);
-  }
-});
+  });
+  
 
 module.exports = router;
