@@ -25,7 +25,6 @@ app.use('/api',ClienteRoutes);
 app.use('/api',DoctoreRoutes);
 app.use('/api',loginRoutes);
 app.use('/api',EspecialidadRoutes);
-app.use('/api',Recuperacion)
 
 
 //Rutas
