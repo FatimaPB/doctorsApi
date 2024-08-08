@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Cliente = require('../models/Cliente');
-const bcrypt = require('bcrypt');
+
 
 // Ruta para verificar correo y respuesta
 router.post('/verificar-correo-respuesta', async (req, res) => {
@@ -36,7 +36,7 @@ router.post('/establecer-nueva-contrasena', async (req, res) => {
     }
 
     // Generar el hash de la nueva contraseña
-    const hash = await bcrypt.hash(nuevaContrasena, 10);
+    const hash = await hash(nuevaContrasena, 10);
 
     // Actualizar la contraseña del cliente en la base de datos
     cliente.contrasena = hash;
