@@ -39,17 +39,17 @@ router.get("/Clientes/:id" , (req, res)=>{
 //editar
 
 router.put('/clientes/:id', async (req, res) => {
-    const { id } = req.params;
-    const updatedCliente = req.body;
-  
-    try {
-      const result = await ClienteSchema.updateOne({ _id: id }, { $set: updatedCliente });
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: 'Error updating client', error });
-    }
-  });
-  
+  const { id } = req.params;
+  const updatedCliente = req.body;
+
+  try {
+    const result = await ClienteSchema.updateOne({ _id: id }, { $set: updatedCliente });
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating client', error });
+  }
+});
+
 //Eliminar
 
 router.delete("/Clientes/:id" ,(req,res)=>{
