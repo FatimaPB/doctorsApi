@@ -59,7 +59,7 @@ router.put('/especialidades/:id', async (req, res) => {
     const {Especialidad}=req.body;
 
     EspecialidadSchema
-    .updateOne({_id : id},{ $set: {Cliente}})
+    .updateOne({_id : id},{ $set: {Especialidad}})
     .then((data) => res.json(data))
     .catch((error) => res.json ({ message:error}));
 });
