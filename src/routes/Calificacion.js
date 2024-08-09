@@ -5,21 +5,21 @@ const Calificacion = require('../models/Calificacion');
 
 // Ruta para registrar una calificación
 router.post('/calificaciones', async (req, res, next) => {
-  try {
-    const { doctorId, calificacion, clienteId } = req.body;
-
-    const nuevaCalificacion = new Calificacion({
-      doctorId,
-      calificacion,
-      clienteId
-    });
-
-    await nuevaCalificacion.save();
-    res.status(201).json({ mensaje: 'Calificación registrada correctamente' });
-  } catch (error) {
-    next(error);
-  }
-});
+    try {
+      const { doctorId, calificacion, clienteId } = req.body;
+  
+      const nuevaCalificacion = new Calificacion({
+        doctorId,
+        calificacion,
+        clienteId
+      });
+  
+      await nuevaCalificacion.save();
+      res.status(201).json({ mensaje: 'Calificación registrada correctamente' });
+    } catch (error) {
+      res.status(500).json({ mensaje: 'Error al registrar la calificación', error: error.message });
+    }
+  });
 
 // Ruta para obtener el promedio de calificaciones de un doctor
 router.get('/promedio/:doctorId', async (req, res) => {
