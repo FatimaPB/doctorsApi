@@ -9,9 +9,9 @@ router.post('/comentarios', async (req, res, next) => {
     const { doctorId, comentario, clienteId } = req.body;
 
     const nuevoComentario = new Comentario({
-      doctorId: mongoose.Types.ObjectId(doctorId),
+      doctorId:(doctorId),
       comentario,
-      clienteId: mongoose.Types.ObjectId(clienteId)
+      clienteId:(clienteId)
     });
 
     await nuevoComentario.save();
