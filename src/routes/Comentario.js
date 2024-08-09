@@ -9,9 +9,9 @@ router.post('/comentarios', async (req, res, next) => {
     const { doctorId, comentario, clienteId } = req.body;
 
     const nuevoComentario = new Comentario({
-      doctorId:(doctorId),
+      doctorId,
       comentario,
-      clienteId:(clienteId)
+      clienteId
     });
 
     await nuevoComentario.save();

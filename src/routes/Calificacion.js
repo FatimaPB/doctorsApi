@@ -9,9 +9,9 @@ router.post('/calificaciones', async (req, res, next) => {
     const { doctorId, calificacion, clienteId } = req.body;
 
     const nuevaCalificacion = new Calificacion({
-      doctorId:(doctorId),
+      doctorId,
       calificacion,
-      clienteId:(clienteId)
+      clienteId
     });
 
     await nuevaCalificacion.save();
