@@ -4,7 +4,7 @@ const router = express.Router();
 const Calificacion = require('../models/Calificacion');
 
 // Ruta para registrar una calificación
-router.post('/', async (req, res, next) => {
+router.post('/calificaciones', async (req, res, next) => {
   try {
     const { doctorId, calificacion, clienteId } = req.body;
 
@@ -24,28 +24,35 @@ router.post('/', async (req, res, next) => {
 // Ruta para obtener el promedio de calificaciones de un doctor
 router.get('/promedio/:doctorId', async (req, res) => {
     try {
-      const doctorId = req.params.doctorId;
+      const { doctorId } = req.params;
   
-      if (!ObjectId.isValid(doctorId)) {
+      if (!doctorId) {
         return res.status(400).json({ error: 'ID de doctor inválido' });
       }
   
-      // Convertir el doctorId a ObjectId
-      const result = await db.collection('Calificacion').aggregate([
-        { $match: { doctorId: ObjectId(doctorId) } },
+      console.log(`Buscando calificaciones para el doctor con ID: ${doctorId}`);
+  
+      const result = await Calificacion.aggregate([
+        { $match: { doctorId: doctorId } },
         {
           $group: {
             _id: '$doctorId',
             promedio: { $avg: '$calificacion' }
           }
         }
-      ]).toArray();
+      ]);
+  
+      console.log(`Resultado de la agregación: ${JSON.stringify(result)}`);
   
       if (result.length === 0) {
         return res.status(404).json({ error: 'No hay calificaciones para este doctor' });
       }
   
       const promedio = result[0].promedio;
+  
+      if (promedio === null) {
+        console.error(`Las calificaciones no son números o están ausentes.`);
+      }
   
       res.json({ promedio });
     } catch (error) {
@@ -54,5 +61,8 @@ router.get('/promedio/:doctorId', async (req, res) => {
     }
   });
   
-
+  
+  
+  
+  
 module.exports = router;
