@@ -8,6 +8,10 @@ router.post('/comentarios', async (req, res, next) => {
     try {
       const { doctorId, comentario, clienteId } = req.body;
   
+      if (!doctorId || !comentario || !clienteId) {
+        return res.status(400).json({ mensaje: 'Datos incompletos' });
+      }
+  
       const nuevoComentario = new Comentario({
         doctorId,
         comentario,
@@ -17,6 +21,7 @@ router.post('/comentarios', async (req, res, next) => {
       await nuevoComentario.save();
       res.status(201).json({ mensaje: 'Comentario registrado correctamente' });
     } catch (error) {
+      console.error('Error al registrar el comentario:', error);
       res.status(500).json({ mensaje: 'Error al registrar el comentario', error: error.message });
     }
   });
