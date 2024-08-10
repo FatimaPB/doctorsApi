@@ -28,7 +28,7 @@ router.get("/clientes",(req,res)=>{
 
 router.get("/Clientes/:id" , (req, res)=>{
 
-    const {id} = res.params;
+    const {id} = req.params;
 
     ClienteSchema
     .findById(id)
