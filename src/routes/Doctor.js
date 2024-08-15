@@ -39,6 +39,8 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
       descripcion,
       especialidadId,
       subespecialidadId,
+      preguntaId,
+      respuesta,
     } = req.body;
 
     const doctor = new Doctor({
@@ -48,6 +50,8 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
       descripcion,
       especialidadId,
       subespecialidadId,
+      preguntaId,
+      respuesta,
       imagen: imagenUrl,
     });
 
@@ -97,6 +101,8 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
       descripcion,
       especialidadId,
       subespecialidadId,
+      preguntaId,
+      respuesta,
     } = req.body;
 
     // Subir la nueva imagen a Cloudinary si se proporciona
@@ -114,6 +120,8 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
         descripcion,
         especialidadId,
         subespecialidadId,
+        preguntaId,
+        respuesta,
         imagen: imagenUrl || undefined, // Usa la nueva imagen si existe
       },
       { new: true }
