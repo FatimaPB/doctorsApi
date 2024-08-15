@@ -25,14 +25,6 @@ const DoctorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  preguntaId: {
-    type: String,
-    required: true,
-  },
-  respuesta: {
-    type: String,
-    required: true,
-  },
   imagen: {
     type: String,
   },
