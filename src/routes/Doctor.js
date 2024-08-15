@@ -34,8 +34,6 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
 
     const {
       nombre,
-      correo,
-      contrasena,
       telefono,
       direccion,
       descripcion,
@@ -47,8 +45,6 @@ router.post('/doctores', upload.single('imagen'), async (req, res) => {
 
     const doctor = new Doctor({
       nombre,
-      correo,
-      contrasena,
       telefono,
       direccion,
       descripcion,
@@ -100,8 +96,6 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
   try {
     const {
       nombre,
-      correo,
-      contrasena,
       telefono,
       direccion,
       descripcion,
@@ -121,8 +115,6 @@ router.put('/doctores/:id', upload.single('imagen'), async (req, res) => {
       req.params.id,
       {
         nombre,
-        correo,
-        contrasena,
         telefono,
         direccion,
         descripcion,
